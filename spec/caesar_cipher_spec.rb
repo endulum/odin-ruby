@@ -1,5 +1,5 @@
 require 'spec_helper'
-require_relative '../caesar_cipher/caesar_cipher'
+require_relative '../basics/caesar_cipher'
 
 describe 'caesar cipher' do
   input = "What a string!"

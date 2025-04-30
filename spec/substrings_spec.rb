@@ -1,5 +1,5 @@
 require 'spec_helper'
-require_relative '../substrings/substrings'
+require_relative '../basics/substrings'
 
 describe 'substrings' do
   dictionary = ["below","down","go","going","horn","how","howdy","it","i","low","own","part","partner","sit"]
