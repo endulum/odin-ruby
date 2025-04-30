@@ -31,6 +31,3 @@ def caesar_cipher string, shift
 
   return enciphered.join('')
 end
-
-p caesar_cipher("What a string!", 5)
-# => "Bmfy f xywnsl!"
