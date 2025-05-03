@@ -1,5 +1,5 @@
 require "spec_helper"
-require_relative "../basics/caesar_cipher"
+require_relative "../lib/basics/caesar_cipher"
 
 describe "caesar cipher" do
   caesar_cipher = CaesarCipher.new
