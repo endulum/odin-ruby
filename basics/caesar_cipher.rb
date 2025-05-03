@@ -1,27 +1,22 @@
-$alphabet = Array('a'..'z')
-
-def caesar_cipher string, shift
-  chars = string.split('')
+def caesar_cipher(string, shift)
+  alphabet = Array("a".."z")
+  chars = string.chars
   enciphered = []
   chars.each do |char|
-    index = $alphabet.index(char.downcase)
+    index = alphabet.index(char.downcase)
     if index
       # get new index
       new_index = index + shift
-      if (new_index > 0)
-        while (new_index > 25)
-          new_index -= 26
-        end
-      else 
-        while (new_index < 0)
-          new_index += 26
-        end
+      if new_index.positive?
+        new_index -= 26 while new_index > 25
+      else
+        new_index += 26 while new_index.negative?
       end
 
       # get new char using index
-      new_char = $alphabet[new_index]
-      new_char = new_char.upcase if (char.upcase == char)
-      
+      new_char = alphabet[new_index]
+      new_char = new_char.upcase if char.upcase == char
+
       # push!
       enciphered.push(new_char)
     else
@@ -29,5 +24,5 @@ def caesar_cipher string, shift
     end
   end
 
-  return enciphered.join('')
+  enciphered.join
 end
