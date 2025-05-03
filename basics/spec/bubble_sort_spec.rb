@@ -1,5 +1,5 @@
 require "spec_helper"
-require_relative "../lib/basics/bubble_sort"
+require_relative "../lib/bubble_sort"
 
 describe "bubble sort" do
   it "works" do

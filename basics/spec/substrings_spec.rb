@@ -1,5 +1,5 @@
 require "spec_helper"
-require_relative "../lib/basics/substrings"
+require_relative "../lib/substrings"
 
 describe "substrings" do
   dictionary = %w[

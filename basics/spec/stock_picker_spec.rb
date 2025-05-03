@@ -1,5 +1,5 @@
 require "spec_helper"
-require_relative "../lib/basics/stock_picker"
+require_relative "../lib/stock_picker"
 
 describe "stock picker" do
   it "works" do
