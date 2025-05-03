@@ -1,30 +1,39 @@
-def correct_index(shift, index)
-  new_index = index + shift
-  if new_index.positive?
-    new_index -= 26 while new_index > 25
-  else
-    new_index += 26 while new_index.negative?
-  end
-  new_index
-end
+# Enciphers strings using caesarian shift, given an alphabet
+class CaesarCipher
+  attr_reader :alphabet
 
-def caesar_char(char, shift)
-  alphabet = Array("a".."z")
-  index = alphabet.index(char.downcase)
-  if index
-    new_index = correct_index(shift, index)
-    new_char = alphabet[new_index]
-    new_char = new_char.upcase if char.upcase == char
-    new_char
-  else
-    char
+  def initialize(alphabet = Array("a".."z"))
+    @alphabet = alphabet
   end
-end
 
-def caesar_cipher(string, shift)
-  chars = string.chars
-  enciphered = chars.map do |char|
-    caesar_char(char, shift)
+  def encipher_string(string, shift)
+    chars = string.chars
+    enciphered = chars.map do |char|
+      encipher_char(char, shift)
+    end
+    enciphered.join
   end
-  enciphered.join
+
+  private
+
+  def encipher_char(char, shift)
+    index = @alphabet.index(char.downcase)
+    if index
+      new_char_index = normalize_index(index + shift)
+      new_char = @alphabet[new_char_index]
+      new_char = new_char.upcase if char.upcase == char
+      new_char
+    else
+      char
+    end
+  end
+
+  def normalize_index(index)
+    if index.positive?
+      index -= @alphabet.length while index > 25
+    else
+      index += @alphabet.length while index.negative?
+    end
+    index
+  end
 end
