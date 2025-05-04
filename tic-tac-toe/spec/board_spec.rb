@@ -64,3 +64,12 @@ describe "winning conditions" do
     expect(board.winning("x")).to be true
   end
 end
+
+describe "print" do
+  it "works" do
+    board = Board.new
+    board.place("x", 0)
+    board.place("o", 8)
+    board.print_grid
+  end
+end
