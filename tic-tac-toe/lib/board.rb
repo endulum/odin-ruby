@@ -2,17 +2,19 @@ require "colorize"
 
 # grid of spaces for marks
 class Board
-  attr_reader :grid
-
   def initialize
     @grid = Array.new(9, nil)
   end
 
-  def place(mark, index)
+  def grid
+    @grid.map { |cell| cell ? cell[:mark] : nil }
+  end
+
+  def place(mark, index, color = :white)
     return false unless index.to_i < @grid.size
     return false unless @grid[index].nil?
 
-    @grid[index] = mark
+    @grid[index] = { mark: mark, color: color }
     true
   end
 
@@ -22,7 +24,9 @@ class Board
       [0, 3, 6], [1, 4, 7], [2, 5, 8], # column wins
       [0, 4, 8], [2, 4, 6] # diagonal wins
     ].any? do |combo|
-      Array.new(3, mark) == [@grid[combo[0]], @grid[combo[1]], @grid[combo[2]]]
+      combo.map do |index|
+        @grid[index] ? @grid[index][:mark] : nil
+      end == [mark, mark, mark]
     end
   end
 
@@ -41,17 +45,9 @@ class Board
   def print_cell(cell, index)
     print "║ ".colorize({ color: :gray })
     if cell
-      print "#{cell.colorize({ color: :white, mode: :bold })} "
+      print "#{cell[:mark].colorize({ color: cell[:color], mode: :bold })} "
     else
       print "#{index.to_s.colorize({ color: :gray })} "
     end
   end
 end
-
-#
-# 2.times do
-#   print "║   ║   ║   ║\n"
-#   print "╠═══╬═══╬═══╣\n"
-# end
-# print "║   ║   ║   ║\n"
-# print "╚═══╩═══╩═══╝\n"
