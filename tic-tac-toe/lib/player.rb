@@ -10,13 +10,17 @@ class Player
     @color = color
   end
 
+  def cname
+    @name.colorize({ color: @color })
+  end
+
+  def cmark
+    @mark.colorize({ color: @color })
+  end
+
   def play_turn(board, index)
     if board.place(@mark, index, @color)
-      puts "#{
-        @name.colorize({ color: @color })
-      } placed a \"#{
-        @mark.colorize({ color: @color })
-      }\" on index #{index}".colorize({ mode: :bold })
+      puts "#{cname} placed a \"#{cmark}\" on index #{index}".colorize({ mode: :bold })
     else
       puts "Not a valid index. Try somewhere else?".colorize({ mode: :bold })
       false
@@ -25,11 +29,7 @@ class Player
 
   def winning?(board)
     won = board.winning?(@mark)
-    if won
-      puts "#{
-          @name.colorize({ color: @color })
-        } won the game!".colorize({ mode: :bold })
-    end
+    puts "#{cname} won the game!".colorize({ mode: :bold }) if won
     won
   end
 end
