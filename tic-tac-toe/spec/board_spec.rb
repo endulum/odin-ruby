@@ -43,25 +43,25 @@ end
 describe "winning conditions" do
   it "does not register a win for an empty board" do
     board = Board.new
-    expect(board.winning("x")).to be false
+    expect(board.winning?("x")).to be false
   end
 
   it "registers a vertical win" do
     board = Board.new
     [0, 3, 6].each { |index| board.place("x", index) }
-    expect(board.winning("x")).to be true
+    expect(board.winning?("x")).to be true
   end
 
   it "registers a horizontal win" do
     board = Board.new
     [0, 1, 2].each { |index| board.place("x", index) }
-    expect(board.winning("x")).to be true
+    expect(board.winning?("x")).to be true
   end
 
   it "registers a diagonal win" do
     board = Board.new
     [0, 4, 8].each { |index| board.place("x", index) }
-    expect(board.winning("x")).to be true
+    expect(board.winning?("x")).to be true
   end
 end
 
