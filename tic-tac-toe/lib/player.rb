@@ -21,6 +21,7 @@ class Player
   def play_turn(board, index)
     if board.place(@mark, index, @color)
       puts "#{cname} placed a \"#{cmark}\" on index #{index}".colorize({ mode: :bold })
+      true
     else
       puts "Not a valid index. Try somewhere else?".colorize({ mode: :bold })
       false
