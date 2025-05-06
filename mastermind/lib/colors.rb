@@ -47,11 +47,15 @@ module Colors
     nil
   end
 
+  # is given string a Mastermind color?
+  def self.color?(string)
+    @colors.key?(string)
+  end
+
   # is given string array an array of Mastermind colors?
   def self.array_of_colors?(array)
-    valid_colors = @colors.keys
     array.all? do |element|
-      valid_colors.include?(element)
+      color?(element)
     end
   end
 end
