@@ -13,7 +13,7 @@ module CLI
   end
 
   def self.read_input(prefix = "❯ ", color = :white)
-    print prefix.colorize(color: color)
+    print "\n#{prefix}".colorize(color: color)
     gets.chomp
   end
 end
