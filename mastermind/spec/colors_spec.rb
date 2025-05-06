@@ -73,3 +73,14 @@ describe "predicates" do
     ).to be false
   end
 end
+
+describe "sampling" do
+  it "returns array of four randomly-picked colors" do
+    10.times do
+      picked_colors = Colors.sample
+      expect(picked_colors.all? do |color|
+        Colors.color?(color)
+      end)
+    end
+  end
+end
