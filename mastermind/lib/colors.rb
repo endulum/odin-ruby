@@ -19,7 +19,7 @@ module Colors
   def self.all_to_colorized_string
     @colors.keys[0..-2].map do |key|
       to_colorized_string(key)
-    end.join(", ") + ", and #{@colors.keys[-1].colorize({ color: @colors.values[-1] })}"
+    end.join(", ") + ", and #{to_colorized_string(@colors.keys[-1])}"
   end
 
   # asks for colors input
@@ -41,7 +41,7 @@ module Colors
     return array unless !is_four_colors_long || !is_all_valid_colors
 
     messages = ["Errors with your guess: #{array}"]
-    messages.push("- You need to choose #{'four'.colorize({ mode: :bold })} colors.") unless is_four_colors_long
+    messages.push("- You need to choose 4 colors. You've chosen #{array.length}.") unless is_four_colors_long
     messages.push("- Please only use valid colors: #{Colors.all_to_colorized_string}") unless is_all_valid_colors
     CLI.print_bold_all(messages)
     nil
