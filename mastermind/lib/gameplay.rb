@@ -20,6 +20,28 @@ class Gameplay
     end
   end
 
+  # rubocop: disable Metrics/MethodLength
+  def self.compare(guess, answer)
+    feedback = []
+    answer_copy = answer.map(&:clone)
+    # find correct colors in correct spots
+    guess.each_with_index do |color, index|
+      if color == answer_copy[index]
+        feedback.push("correct")
+        answer_copy[index] = nil
+      end
+    end
+    # find correct colors in wrong spots
+    guess.each do |color|
+      if answer_copy.include?(color)
+        feedback.push("almost")
+        answer_copy[answer_copy.find_index(color)] = nil
+      end
+    end
+    feedback
+  end
+  # rubocop: enable Metrics/MethodLength
+
   private
 
   # prompt a guess, evaluate, record, and return it
@@ -28,35 +50,10 @@ class Gameplay
     CLI.print_bold("You guessed: #{guess.map do |c|
       Colors.to_colorized_string(c)
     end.join(', ')}")
-    feedback = feedback_correct_guesses(guess)
+    feedback = self.class.compare(guess, @code)
     p feedback
     @guesses.push({ guess: guess, feedback: feedback })
     guess
-  end
-
-  # give feedback for correct colors in correct spots
-  def feedback_correct_guesses(guess)
-    feedback = []
-    code_copy = @code.map(&:clone)
-    guess.each_with_index do |color, index|
-      if color == code_copy[index]
-        feedback.push("correct")
-        code_copy[index] = nil
-      end
-    end
-    feedback.concat feedback_almost_guesses(guess, code_copy)
-  end
-
-  # give feedback for correct colors in wrong spots
-  def feedback_almost_guesses(guess, code_copy)
-    feedback = []
-    guess.each do |color|
-      if code_copy.include?(color)
-        feedback.push("almost")
-        code_copy[code_copy.find_index(color)] = nil
-      end
-    end
-    feedback
   end
 
   # compare the guess to correct code
