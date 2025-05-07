@@ -1,4 +1,4 @@
-require_relative "lib/colors"
+require_relative "lib/gameplay"
 require_relative "lib/cli"
 
 def print_instructions
@@ -13,6 +13,5 @@ end
 
 print_instructions
 
-loop do
-  Colors.prompt_colors
-end
+game = Gameplay.new
+game.play
