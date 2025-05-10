@@ -2,6 +2,7 @@ require "colorize"
 
 # helper methods for Mastermind colors
 module Colors
+  # mapping color name strings to Colorizer symbols
   @colors = {
     "red" => :red,
     "blue" => :blue,
@@ -10,32 +11,40 @@ module Colors
     "magenta" => :magenta
   }
 
-  # all Mastermind colors
+  ### return an array of strings
+
+  # all Mastermind colors, as an array of strings
   def self.all
     @colors.keys
   end
 
-  # colorized string of all Mastermind colors in a sentence-appropriate phrase
-  def self.all_to_colorized_string
-    all[0..-2].map do |key|
-      to_colorized_string(key)
-    end.join(", ") + ", and #{to_colorized_string(all[-1])}"
+  # sample random Mastermind colors, as an array of strings
+  def self.sample(amount = 4)
+    Array.new(amount) { all.sample }
   end
+
+  ### return a string for printing
+
+  # colorized name string of one Mastermind color
+  def self.to_string(string)
+    string.colorize({ color: to_symbol(string) }) if to_symbol(string)
+  end
+
+  # colorized name string of all Mastermind colors in a sentence-appropriate phrase
+  def self.all_to_list_string
+    all[0..-2].map do |key|
+      to_string(key)
+    end.join(", ") + ", and #{to_string(all[-1])}"
+  end
+
+  ### return a Colorizer symbol
 
   # color symbol of one Mastermind color
   def self.to_symbol(string)
     @colors[string]
   end
 
-  # colorized identifying string (red "red", blue "blue", etc)
-  def self.to_colorized_string(string)
-    string.colorize({ color: to_symbol(string) }) if to_symbol(string)
-  end
-
-  # colorized arbitrary string
-  def self.color_text(string, color)
-    string.colorize({ color: to_symbol(color) }) if to_symbol(string)
-  end
+  ### predicates
 
   # is given string a Mastermind color?
   def self.color?(string)
@@ -47,10 +56,5 @@ module Colors
     array.all? do |element|
       color?(element)
     end
-  end
-
-  # sample random colors
-  def self.sample(amount = 4)
-    Array.new(amount) { all.sample }
   end
 end
