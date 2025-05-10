@@ -13,6 +13,7 @@ class Gameplay
   def play
     loop do
       guess = prompt_guess
+      print_history_table
       if correct?(guess)
         CLI.print_bold("You guessed correctly! The code was #{@code}. You took #{@guesses.length} guesses.")
         break
@@ -44,6 +45,48 @@ class Gameplay
 
   private
 
+  # print history table
+  def print_history_table
+    print history_start
+    @guesses.each_with_index do |guess, index|
+      print history_row_count(index)
+      print history_row_guess(guess[:guess])
+      print history_row_feedback(guess[:feedback])
+    end
+    print "   ╚═══════════╩═══════════╝\n".colorize({ color: :gray })
+  end
+
+  def history_start
+    "   ╔═ ".colorize(
+      { color: :gray }
+    ) + "Guesses".colorize(
+      { color: :white, mode: :bold }
+    ) + " ═╦═══════════╗\n".colorize(
+      { color: :gray }
+    )
+  end
+
+  def history_row_count(index)
+    (index + 1).to_s.rjust(2, " ").colorize(
+      { color: :white, mode: :bold }
+    ) + " ║  ".colorize({ color: :gray })
+  end
+
+  def history_row_guess(guess)
+    guess.map do |color|
+      "●".colorize({ color: Colors.to_symbol(color) })
+    end.join(" ") + "  ║  ".colorize({ color: :gray })
+  end
+
+  def history_row_feedback(feedback)
+    feedback
+      .join(" ")
+      .gsub("correct", "✓")
+      .gsub("almost", "✗")
+      .ljust(7, " ")
+      .colorize({ color: :white }) + "  ║\n".colorize({ color: :gray })
+  end
+
   # prompt a guess, evaluate, record, and return it
   def prompt_guess
     guess = parse_guess(CLI.read_input) until guess
@@ -51,7 +94,6 @@ class Gameplay
       Colors.to_colorized_string(c)
     end.join(', ')}")
     feedback = self.class.compare(guess, @code)
-    p feedback
     @guesses.push({ guess: guess, feedback: feedback })
     guess
   end

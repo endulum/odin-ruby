@@ -1,4 +1,5 @@
 require "colorize"
+require_relative "colors"
 
 # helper methods for interaction with the command line
 module CLI

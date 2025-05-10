@@ -27,9 +27,14 @@ module Colors
     @colors[string]
   end
 
-  # colorized string of one Mastermind color
+  # colorized identifying string (red "red", blue "blue", etc)
   def self.to_colorized_string(string)
     string.colorize({ color: to_symbol(string) }) if to_symbol(string)
+  end
+
+  # colorized arbitrary string
+  def self.color_text(string, color)
+    string.colorize({ color: to_symbol(color) }) if to_symbol(string)
   end
 
   # is given string a Mastermind color?
