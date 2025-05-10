@@ -3,8 +3,11 @@ require_relative "cli"
 
 # stores color combinations in "guesses" with feedback
 class Guess
-  def initialize
-    guess = parse_guess(CLI.read_input) until guess
+  attr_reader :guess, :feedback
+
+  def initialize(answer)
+    @guess = Guess.parse(CLI.read_input) until @guess
+    @feedback = Guess.compare(@guess, answer.map(&:clone))
   end
 
   # parse input into a guess, or return nothing and print errors if input is invalid

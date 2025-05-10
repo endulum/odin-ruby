@@ -3,7 +3,7 @@ require "colorize"
 require_relative "../lib/colors"
 require_relative "../lib/guess"
 
-describe "making a guess" do
+describe "parsing a guess" do
   it "returns guess if valid guess string" do
     expect(Guess.parse("red red red red")).to eq %w[red red red red]
   end
