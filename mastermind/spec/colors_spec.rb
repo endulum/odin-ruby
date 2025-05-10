@@ -11,7 +11,7 @@ describe "showing all colors" do
   end
 
   it "shows a colorized string of all valid colors" do
-    expect(Colors.all_to_colorized_string).to eq(
+    expect(Colors.all_to_list_string).to eq(
       "#{
         'red'.colorize({ color: :red })
       }, #{
@@ -40,13 +40,13 @@ describe "color string conversion" do
   it "returns a colorized string for each color, if a valid color" do
     all_colors.each do |color|
       expect(
-        Colors.to_colorized_string(color)
+        Colors.to_string(color)
       ).to eq(
         color.colorize({ color: Colors.to_symbol(color) })
       )
     end
     wrong_colors.each do |color|
-      expect(Colors.to_colorized_string(color)).to be_nil
+      expect(Colors.to_string(color)).to be_nil
     end
   end
 end
