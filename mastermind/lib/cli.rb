@@ -3,13 +3,13 @@ require_relative "colors"
 
 # helper methods for interaction with the command line
 module CLI
-  def self.print_bold(string)
-    puts string.colorize({ mode: :bold })
+  def self.print_unless_rspec(string)
+    print string unless defined?(RSpec)
   end
 
-  def self.print_bold_all(array)
+  def self.print_all_unless_rspec(array)
     array.each do |string|
-      print_bold(string)
+      print_unless_rspec(string)
     end
   end
 
