@@ -8,7 +8,7 @@ class Guess
 
   def initialize(answer)
     @guess = Guess.parse(CLI.read_input) until @guess
-    @feedback = Guess.compare(@guess, answer.map(&:clone))
+    @feedback = Guess.compare(@guess, answer)
   end
 
   # parse input into a guess, or return nothing and print errors if input is invalid
@@ -28,7 +28,10 @@ class Guess
 
   # generate feedback from a guess based on the correct answer
   def self.compare(guess, answer)
-    feedback_correct(guess, answer) + feedback_almost(guess, answer)
+    answer_copy = answer.map(&:clone)
+    correct = feedback_correct(guess, answer_copy)
+    almost = feedback_almost(guess, answer_copy)
+    correct + almost
   end
 
   # find correct colors in correct spots
