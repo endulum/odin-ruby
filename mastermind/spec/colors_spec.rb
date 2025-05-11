@@ -3,55 +3,46 @@ require "colorize"
 require_relative "../lib/colors"
 
 all_colors = %w[red blue green yellow magenta]
-wrong_colors = %w[pink orange purple white black]
 
-describe "showing all colors" do
-  it "shows array of valid colors" do
+describe "all valid colors" do
+  it "shows array of all valid colors" do
     expect(Colors.all).to eq all_colors
   end
+end
 
-  it "shows a colorized string of all valid colors" do
+describe "Colorizer helpers" do
+  it "gets a colorized string of colors given an array of names" do
+    expect(Colors.to_list_string(%w[red blue yellow]))
+      .to eq "#{
+        'red'.colorize({ color: :red })}, #{
+        'blue'.colorize({ color: :blue })}, #{
+        'yellow'.colorize({ color: :yellow })}"
+  end
+
+  it "gets a colorized string of all valid colors" do
     expect(Colors.all_to_list_string).to eq(
-      "#{
-        'red'.colorize({ color: :red })
-      }, #{
-        'blue'.colorize({ color: :blue })
-      }, #{
-        'green'.colorize({ color: :green })
-      }, #{
-        'yellow'.colorize({ color: :yellow })
-      }, and #{
-        'magenta'.colorize({ color: :magenta })
-      }"
+      "#{'red'.colorize({ color: :red })}, #{
+         'blue'.colorize({ color: :blue })}, #{
+         'green'.colorize({ color: :green })}, #{
+         'yellow'.colorize({ color: :yellow })}, and #{
+         'magenta'.colorize({ color: :magenta })}"
     )
   end
 end
 
-describe "color string conversion" do
-  it "returns a symbol for each color, if a valid color" do
-    all_colors.each do |color|
-      expect(Colors.to_symbol(color)).to be_a(Symbol)
-    end
-    wrong_colors.each do |color|
-      expect(Colors.to_symbol(color)).to be_nil
-    end
+describe "conversions" do
+  it "converts code to colors" do
+    expect(Colors.code_to_array("12345")).to eq all_colors
   end
 
-  it "returns a colorized string for each color, if a valid color" do
-    all_colors.each do |color|
-      expect(
-        Colors.to_string(color)
-      ).to eq(
-        color.colorize({ color: Colors.to_symbol(color) })
-      )
-    end
-    wrong_colors.each do |color|
-      expect(Colors.to_string(color)).to be_nil
-    end
+  it "converts colors to code" do
+    expect(Colors.array_to_code(all_colors)).to eq "12345"
   end
 end
 
 describe "predicates" do
+  wrong_colors = %w[pink orange purple white black]
+
   it "determines individual valid colors" do
     all_colors.each do |color|
       expect(Colors.color?(color)).to be true
@@ -69,7 +60,7 @@ describe "predicates" do
       Colors.array_of_colors?(%w[owo uwu])
     ).to be false
     expect(
-      Colors.array_of_colors?(%w[red pink white])
+      Colors.array_of_colors?(all_colors + wrong_colors)
     ).to be false
   end
 end

@@ -2,7 +2,7 @@ require "colorize"
 
 # helper methods for Mastermind colors
 module Colors
-  # mapping color name strings to Colorizer symbols
+  # mapping names to Colorizer symbols
   @colors = {
     "red" => :red,
     "blue" => :blue,
@@ -11,37 +11,65 @@ module Colors
     "magenta" => :magenta
   }
 
-  ### return an array of strings
-
-  # all Mastermind colors, as an array of strings
+  # all color strings
   def self.all
     @colors.keys
   end
 
-  # sample random Mastermind colors, as an array of strings
   def self.sample(amount = 4)
     Array.new(amount) { all.sample }
   end
 
-  ### return a string for printing
+  ### Colorizer helpers
 
-  # colorized name string of one Mastermind color
-  def self.to_string(string)
-    string.colorize({ color: to_symbol(string) }) if to_symbol(string)
+  # convert name to Colorizer symbol
+  def self.name_to_symbol(name)
+    @colors[name]
   end
 
-  # colorized name string of all Mastermind colors in a sentence-appropriate phrase
+  # convert name to Colorized name string
+  def self.name_to_string(string)
+    string.colorize({ color: name_to_symbol(string) }) if name_to_symbol(string)
+  end
+
+  # colorized names of colors given color array in a comma-separated list
+  def self.to_list_string(array)
+    array.map do |key|
+      name_to_string(key)
+    end.join(", ")
+  end
+
+  # same as above, but all colors and in a sentence-appropriate phrase
   def self.all_to_list_string
     all[0..-2].map do |key|
-      to_string(key)
-    end.join(", ") + ", and #{to_string(all[-1])}"
+      name_to_string(key)
+    end.join(", ") + ", and #{name_to_string(all[-1])}"
   end
 
-  ### return a Colorizer symbol
+  ### conversions between numbers and names
 
-  # color symbol of one Mastermind color
-  def self.to_symbol(string)
-    @colors[string]
+  ## convert number to name
+  def self.number_to_color(index)
+    @colors.keys[index - 1]
+  end
+
+  # convert name to number
+  def self.color_to_number(color)
+    @colors.keys.index(color) + 1
+  end
+
+  # convert array of names to string of numbers
+  def self.array_to_code(array)
+    array.map do |color|
+      color_to_number(color)
+    end.join
+  end
+
+  # convert string of numbers to array of names
+  def self.code_to_array(code)
+    code.chars.map do |number|
+      number_to_color(number.to_i)
+    end
   end
 
   ### predicates
