@@ -1,3 +1,4 @@
+require "colorize"
 require_relative "colors"
 require_relative "cli"
 
@@ -17,7 +18,11 @@ class Guess
     is_all_valid_colors = Colors.array_of_colors?(array)
     return array unless !is_four_colors_long || !is_all_valid_colors
 
-    print_guess_errors(is_four_colors_long, is_all_valid_colors) unless defined?(RSpec)
+    unless defined?(RSpec)
+      print_guess_errors(
+        array, is_four_colors_long, is_all_valid_colors
+      )
+    end
     nil
   end
 
@@ -51,14 +56,14 @@ class Guess
   end
 
   # collect guess errors into an array for printing
-  def print_guess_errors(is_four_colors_long, is_all_valid_colors)
-    messages = ["There were some errors with your guess, which was: #{array}"]
-    messages.push("- You need to choose 4 colors. You've chosen #{array.length}.") unless is_four_colors_long
-    messages.push("- Please only use valid colors: #{Colors.all_to_colorized_string}") unless is_all_valid_colors
-    CLI.print_all_unless_rspec(messages)
+  def self.print_guess_errors(array, is_four_colors_long, is_all_valid_colors)
+    messages = ["There were some errors with your guess, which was: #{array}\n"]
+    messages.push("- You need to choose 4 colors. You've chosen #{array.length}.\n") unless is_four_colors_long
+    messages.push("- Please only use valid colors: #{Colors.all_to_list_string}.\n") unless is_all_valid_colors
+    CLI.print_all_unless_rspec(messages.map { |msg| msg.colorize({ mode: :bold }) })
   end
 
-  private :print_guess_errors
+  private_class_method :print_guess_errors
   private_class_method :feedback_correct
   private_class_method :feedback_almost
 end
