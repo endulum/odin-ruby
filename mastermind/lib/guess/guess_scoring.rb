@@ -9,7 +9,6 @@ module GuessScoring
     @pairs = code.chars.zip(answer.chars)
     calculate_black_pegs
     calculate_white_pegs
-    print_feedback(@score) unless defined?(RSpec)
     @score
   end
 

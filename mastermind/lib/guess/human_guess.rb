@@ -16,5 +16,6 @@ class HumanGuess
       Colors.to_list_string(Colors.code_to_array(@guess))
     }".colorize({ mode: :bold })
     @score = GuessScoring.calculate(guess, answer)
+    GuessScoring.print_feedback(@score) unless defined?(RSpec)
   end
 end
