@@ -3,6 +3,7 @@ require_relative "../colors"
 require_relative "../cli"
 require_relative "../guess/guess_input"
 require_relative "../guess/computer_guess"
+require_relative "../cpu/computer_decision"
 
 # gameloop for computer codebreaker
 class ComputerLoop
@@ -11,6 +12,7 @@ class ComputerLoop
   end
 
   def play
+    @computer_decision = ComputerDecision.new
     print_start
     init_fields
     print_guesses_left
@@ -31,7 +33,7 @@ class ComputerLoop
 
   def make_attempt
     wait_for_thinking
-    attempt = ComputerGuess.new("1122", @answer)
+    attempt = ComputerGuess.new(@computer_decision.make_guess(@attempts.last), @answer)
     @attempts.push attempt
     print_win if attempt.guess == @answer
     attempt
