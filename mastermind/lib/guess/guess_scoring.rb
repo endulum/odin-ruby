@@ -1,5 +1,5 @@
-# handle scoring
-module Scoring
+# handle scoring for a guess
+module GuessScoring
   def self.calculate(code, answer)
     @score = ""
     @wrong_guess_colors = []
@@ -9,6 +9,8 @@ module Scoring
     calculate_white_pegs
     @score
   end
+
+  # TODO: make below private
 
   def self.calculate_black_pegs
     @pairs.each do |guess, answer| # ?
