@@ -15,6 +15,8 @@ module GuessScoring
   def self.print_feedback(score)
     correct_count = score.count("B")
     almost_count = score.count("W")
+    return unless correct_count < 4
+
     puts "✔ There #{to_v(correct_count)} #{correct_count} correct color#{to_s(correct_count)} in the correct spot."
       .colorize({ mode: :bold })
     puts "✘ There #{to_v(almost_count)} #{almost_count} correct color#{to_s(almost_count)} in an incorrect spot."
