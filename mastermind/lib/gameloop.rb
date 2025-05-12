@@ -1,72 +1,68 @@
 require "colorize"
-require_relative "colors"
+require "pry-byebug"
 require_relative "cli"
-require_relative "guess"
-require_relative "guesstable"
+require_relative "loops/human_loop"
+require_relative "loops/computer_loop"
 
-# creates and controls the game loop
+# the base loop for the program
 class Gameloop
-  include GuessTable
-
   def initialize
-    @answer = Colors.sample
-    @attempts = []
-  end
-
-  def play
-    print_start
+    puts "Welcome to Mastermind.".colorize({ mode: :bold })
     loop do
-      attempt = make_attempt
-      if attempt.guess == @answer
-        print_win
+      command = prompt_command
+      play(command)
+      play_again = prompt_play_again
+      unless play_again
+        puts "Goodbye!".colorize({ mode: :bold })
         break
-      else
-        print_feedback(attempt.feedback)
       end
     end
   end
 
-  private
-
-  def make_attempt
-    attempt = Guess.new(@answer)
-    print_guess(attempt.guess)
-    @attempts.push attempt
-    print_table(@attempts)
-    attempt
-  end
-
-  def print_start
+  def print_prompt_command
     [
-      "To make a guess, enter the names of the four colors of your guess.",
-      "The available colors are #{Colors.all_to_list_string}.",
-      "Proper format is each color separated by space, e.g. 'red blue red blue'."
+      "\nType \"breaker\" to be the codebreaker, and try to figure out the computer's code.",
+      "Type \"maker\" to be the codemaker, and watch the computer solve your code."
     ].each do |string|
       puts string.colorize({ mode: :bold })
     end
   end
 
-  def print_guess(guess)
-    puts "You guessed: #{guess.map do |c|
-      Colors.to_string(c)
-    end.join(', ')}".colorize({ mode: :bold })
+  def prompt_command
+    print_prompt_command
+    command = CLI.read_input
+    valid_commands = %w[breaker maker]
+    loop do
+      break if valid_commands.include?(command)
+
+      puts "Invalid command: #{command}"
+      print_prompt_command
+      command = CLI.read_input
+    end
+    command
   end
 
-  def print_feedback(feedback)
-    correct_count = feedback.count("correct")
-    almost_count = feedback.count("almost")
-    puts "You have #{correct_count} correct color#{
-      correct_count == 1 ? '' : 's'
-    } in the correct spot.".colorize({ mode: :bold })
-    puts "You have #{almost_count} correct color#{
-      almost_count == 1 ? '' : 's'
-    } in an incorrect spot.".colorize({ mode: :bold })
+  def prompt_play_again
+    puts "\nWant to play again? (y/n)".colorize({ mode: :bold })
+    answer = CLI.read_input
+    valid_answers = %w[y n]
+    loop do
+      break if valid_answers.include?(answer)
+
+      puts "Invalid answer: #{answer}"
+      puts "Please type 'y' (yes) or 'n' (no)".colorize({ mode: :bold })
+      answer = CLI.read_input
+    end
+    answer == "y"
   end
 
-  def print_win
-    puts "You guessed correctly! The code was #{@answer.map do |c|
-      Colors.to_string(c)
-    end.join(', ')}. You took #{@attempts.length} guesses."
-       .colorize({ mode: :bold })
+  def play(command)
+    if command == "breaker"
+      game = HumanLoop.new
+      game.play
+    elsif command == "maker"
+      game = ComputerLoop.new
+      game.play
+    end
   end
 end
