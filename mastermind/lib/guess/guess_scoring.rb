@@ -1,3 +1,5 @@
+require "colorize"
+
 # handle scoring for a guess
 module GuessScoring
   def self.calculate(code, answer)
