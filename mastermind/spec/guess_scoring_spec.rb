@@ -1,29 +1,29 @@
 require "spec_helper"
-require_relative "../lib/scoring"
+require_relative "../lib/guess/guess_scoring"
 
 describe "scoring" do
   it "works (all correct)" do
-    expect(Scoring.calculate("1111", "1111")).to eq "BBBB"
+    expect(GuessScoring.calculate("1111", "1111")).to eq "BBBB"
   end
 
   it "works (all almost)" do
-    expect(Scoring.calculate("4321", "1234")).to eq "WWWW"
+    expect(GuessScoring.calculate("4321", "1234")).to eq "WWWW"
   end
 
   it "works (some correct)" do
-    expect(Scoring.calculate("1221", "1234")).to eq "BB"
+    expect(GuessScoring.calculate("1221", "1234")).to eq "BB"
   end
 
   it "works (some almost)" do
-    expect(Scoring.calculate("1212", "3321")).to eq "WW"
+    expect(GuessScoring.calculate("1212", "3321")).to eq "WW"
   end
 
   it "works (some correct, some almost)" do
-    expect(Scoring.calculate("1212", "1221")).to eq "BBWW"
+    expect(GuessScoring.calculate("1212", "1221")).to eq "BBWW"
   end
 
   it "works (nothing)" do
-    expect(Scoring.calculate("1111", "2222")).to eq ""
+    expect(GuessScoring.calculate("1111", "2222")).to eq ""
   end
 end
 
@@ -37,7 +37,7 @@ describe("simulate gameplay (1)") do
       { guess: "3132", score: "BBBB" }
     ]
     history.each do |round|
-      expect(Scoring.calculate(round[:guess], answer)).to eq round[:score]
+      expect(GuessScoring.calculate(round[:guess], answer)).to eq round[:score]
     end
   end
 end
@@ -55,7 +55,7 @@ describe("simulate gameplay (2)") do
       { guess: "4223", score: "BBBB" }
     ]
     history.each do |round|
-      expect(Scoring.calculate(round[:guess], answer)).to eq round[:score]
+      expect(GuessScoring.calculate(round[:guess], answer)).to eq round[:score]
     end
   end
 end
