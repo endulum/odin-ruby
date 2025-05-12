@@ -31,25 +31,18 @@ class HumanLoop
   def make_attempt
     attempt = HumanGuess.new(@answer)
     @attempts.push attempt
-    print_guess(attempt.guess)
+    print_win if attempt.guess == @answer
     attempt
   end
 
   def print_start
     [
-      "To make a guess, enter the names of the four colors of your guess.",
+      "\nTo make a guess, enter the names of the four colors of your guess.",
       "The available colors are #{Colors.all_to_list_string}.",
       "Proper format is each color separated by space, e.g. 'red blue red blue'."
     ].each do |string|
       puts string.colorize({ mode: :bold })
     end
-  end
-
-  def print_guess(guess)
-    puts "You guessed: #{
-      Colors.to_list_string(Colors.code_to_array(guess))
-    }".colorize({ mode: :bold })
-    print_win if guess == @answer
   end
 
   def print_guesses_left
@@ -66,6 +59,5 @@ class HumanLoop
   def print_win
     puts "You guessed correctly! You took #{@attempts.length} guesses."
       .colorize({ mode: :bold })
-    puts
   end
 end

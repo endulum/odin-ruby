@@ -33,7 +33,7 @@ class ComputerLoop
     wait_for_thinking
     attempt = ComputerGuess.new("1122", @answer)
     @attempts.push attempt
-    print_guess(attempt.guess)
+    print_win if attempt.guess == @answer
     attempt
   end
 
@@ -44,19 +44,12 @@ class ComputerLoop
 
   def print_start
     [
-      "Enter a code of four colors, and the computer will try to guess it.",
+      "\nEnter a code of four colors, and the computer will try to guess it.",
       "The available colors are #{Colors.all_to_list_string}.",
       "Proper format is each color separated by space, e.g. 'red blue red blue'."
     ].each do |string|
       puts string.colorize({ mode: :bold })
     end
-  end
-
-  def print_guess(guess)
-    puts "The computer guessed: #{
-      Colors.to_list_string(Colors.code_to_array(guess))
-    }".colorize({ mode: :bold })
-    print_win if guess == @answer
   end
 
   def print_guesses_left
@@ -73,6 +66,5 @@ class ComputerLoop
   def print_win
     puts "The computer guessed correctly! It took #{@attempts.length} guesses."
       .colorize({ mode: :bold })
-    puts
   end
 end

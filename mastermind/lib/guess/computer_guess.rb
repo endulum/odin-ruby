@@ -1,4 +1,5 @@
 require "colorize"
+require_relative "../colors"
 require_relative "guess_input"
 require_relative "guess_scoring"
 
@@ -11,6 +12,9 @@ class ComputerGuess
 
   def initialize(input, answer)
     @guess = input
+    puts "The computer guessed: #{
+      Colors.to_list_string(Colors.code_to_array(@guess))
+    }".colorize({ mode: :bold })
     @score = GuessScoring.calculate(guess, answer)
   end
 end
