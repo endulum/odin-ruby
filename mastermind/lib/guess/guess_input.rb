@@ -14,17 +14,21 @@ module GuessInput
     array = input.split
     is_four_colors_long = array.length == 4
     is_all_valid_colors = Colors.array_of_colors?(array)
-    return Colors.array_to_code(array) unless !is_four_colors_long || !is_all_valid_colors
-
-    unless defined?(RSpec)
-      print_guess_errors(
-        array, is_four_colors_long, is_all_valid_colors
-      )
+    if is_four_colors_long && is_all_valid_colors
+      print_guess(array) unless defined?(RSpec)
+      return Colors.array_to_code(array)
     end
+
+    print_guess_errors(array, is_four_colors_long, is_all_valid_colors) unless defined?(RSpec)
     nil
   end
 
   # TODO: make below private
+
+  # log input
+  def self.print_guess(guess)
+    puts "You guessed: #{Colors.to_list_string(guess)}".colorize({ mode: :bold })
+  end
 
   # collect input guess errors into an array to print
   def self.print_guess_errors(array, is_four_colors_long, is_all_valid_colors)

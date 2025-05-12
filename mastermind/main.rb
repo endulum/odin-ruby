@@ -1,4 +1,4 @@
-require_relative "lib/gameloop"
+require_relative "lib/loops/human_loop"
 
-game = Gameloop.new
+game = HumanLoop.new
 game.play
