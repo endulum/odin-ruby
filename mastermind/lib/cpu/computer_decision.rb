@@ -25,9 +25,7 @@ class ComputerDecision
 
   def minmax_guess
     guesses = @possible_scores.map do |guess, scores_by_answer|
-      scores_by_answer = scores_by_answer.select do |answer, _score|
-        @possible_answers.include?(answer)
-      end
+      scores_by_answer = scores_by_answer.slice(*@possible_answers)
       @possible_scores[guess] = scores_by_answer
       score_groups = scores_by_answer.values.group_by(&:itself)
       possibility_counts = score_groups.values.map(&:length)
