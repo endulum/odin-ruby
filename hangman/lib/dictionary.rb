@@ -8,22 +8,34 @@ module Dictionary
   def self.check
     if File.exist? "./data/dictionary.txt"
       CLI.bprint "Dictionary exists."
+      load
     else
       CLI.bprint "Dictionary does not exist."
       download
     end
   end
 
+  def self.load
+    CLI.bprint "Loading dictionary..."
+    File.open("./data/dictionary.txt") do |f|
+      @words = f.readlines.map(&:chomp)
+    end
+  end
+
   def self.download
     CLI.bprint "Downloading dictionary..."
     dictionary_download = URI.parse(DICTIONARY_URL).open
-    words = File
-            .read(dictionary_download)
-            .split("\n")
-            .keep_if { |word| word.length.between?(5, 12) }
+    @words = File
+             .read(dictionary_download)
+             .split("\n")
+             .keep_if { |word| word.length.between?(5, 12) }
     File.new("./data/dictionary.txt", "w+")
     File.open("./data/dictionary.txt", "w+") do |f|
-      f.puts(words)
+      f.puts(@words)
     end
+  end
+
+  def self.words
+    @words
   end
 end
