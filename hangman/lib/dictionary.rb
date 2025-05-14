@@ -41,11 +41,11 @@ module Dictionary
 
   def self.choose_word(difficulty)
     case difficulty
-    when "easy"
+    when "e"
       @words.filter { |word| word.length < 7 }.sample
-    when "medium"
+    when "m"
       @words.filter { |word| word.length.between?(7, 9) }.sample
-    when "hard"
+    when "h"
       @words.filter { |word| word.length > 9 }.sample
     end
   end

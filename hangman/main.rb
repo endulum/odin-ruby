@@ -1,6 +1,7 @@
-require_relative "lib/dictionary"
+require_relative "lib/hangman"
 
-Dictionary.check
-10.times do
-  p Dictionary.choose_word("hard")
-end
+game = Game.new
+game.play
+
+# TODO: decouple printing from game logic
+# TODO: test game logic!

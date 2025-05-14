@@ -10,8 +10,8 @@ module CLI
     print array.join("\n").colorize({ mode: :bold })
   end
 
-  def self.read_input(prefix = "❯ ", color = :white)
-    print "\n#{prefix}".colorize(color: color)
+  def self.read_input(text = nil, prefix = "❯ ", color = :white)
+    print "\n#{text ? "#{text} " : ''}#{prefix}".colorize(color: color)
     gets.chomp
   end
 end
