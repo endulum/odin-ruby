@@ -38,4 +38,15 @@ module Dictionary
   def self.words
     @words
   end
+
+  def self.choose_word(difficulty)
+    case difficulty
+    when "easy"
+      @words.filter { |word| word.length < 7 }.sample
+    when "medium"
+      @words.filter { |word| word.length.between?(7, 9) }.sample
+    when "hard"
+      @words.filter { |word| word.length > 9 }.sample
+    end
+  end
 end

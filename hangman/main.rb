@@ -1,4 +1,6 @@
 require_relative "lib/dictionary"
 
 Dictionary.check
-p Dictionary.words
+10.times do
+  p Dictionary.choose_word("hard")
+end
