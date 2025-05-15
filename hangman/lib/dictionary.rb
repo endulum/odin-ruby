@@ -6,11 +6,13 @@ module Dictionary
   DICTIONARY_URL = "https://raw.githubusercontent.com/first20hours/google-10000-english/master/google-10000-english-no-swears.txt".freeze
 
   def self.check
-    if File.exist? "./data/dictionary.txt"
-      CLI.bprint "Dictionary exists."
+    if @words&.length&.positive?
+      CLI.bprint "Dictionary already loaded."
+    elsif File.exist? "./data/dictionary.txt"
+      CLI.bprint "Dictionary file exists."
       load
     else
-      CLI.bprint "Dictionary does not exist."
+      CLI.bprint "Dictionary file does not exist."
       download
     end
   end
