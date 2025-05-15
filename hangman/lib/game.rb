@@ -14,7 +14,7 @@ class Game
     loop do
       print_game
       guess = prompt_guess until guess
-      word = @hangman.reveal_word_with_guess(guess)
+      word = @hangman.evaluate_guess(guess)
       if word
         CLI.bprint("The word was \"#{word}\"! You win!")
         break

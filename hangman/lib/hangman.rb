@@ -17,7 +17,7 @@ class Hangman
     @incorrect_words.include?(word)
   end
 
-  def reveal_word_with_guess(guess)
+  def evaluate_guess(guess)
     return @word if @word == guess
 
     if guess.length > 1
