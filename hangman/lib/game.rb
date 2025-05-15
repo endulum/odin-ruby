@@ -14,11 +14,8 @@ class Game
     loop do
       print_game
       guess = prompt_guess until guess
-      word = @hangman.evaluate_guess(guess)
-      if word
-        CLI.bprint("The word was \"#{word}\"! You win!")
-        break
-      end
+      result = @hangman.evaluate_guess(guess)
+      break if end_of_game?(result)
     end
   end
 
@@ -28,6 +25,35 @@ class Game
       "Incorrect letters: #{@hangman.incorrect_chars.join(', ')}",
       "Incorrect guesses: #{@hangman.incorrect_words.join(', ')}"
     ]
+  end
+
+  def end_of_game?(result)
+    if result
+      return print_guess_win
+    elsif @hangman.concealed_word.delete(" ").count("_").zero?
+      return print_reveal_win
+    elsif @hangman.incorrect_chars.length + @hangman.incorrect_words.length == 6
+      return print_guess_lose
+    end
+
+    false
+  end
+
+  def print_guess_win
+    CLI.bprint("\nThe word was #{result}! You won!")
+    true
+  end
+
+  def print_reveal_win
+    print_game
+    CLI.bprint("\nYou revealed the word, which was \"#{@hangman.concealed_word.delete(' ')}\"! You won!")
+    true
+  end
+
+  def print_guess_lose
+    print_game
+    CLI.bprint("\nYou ran out of guesses! You lost!")
+    true
   end
 
   def prompt_difficulty
