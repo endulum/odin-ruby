@@ -1,7 +1,4 @@
-require_relative "lib/hangman"
+require_relative "lib/game"
 
 game = Game.new
 game.play
-
-# TODO: decouple printing from game logic
-# TODO: test game logic!
