@@ -4,10 +4,14 @@ require_relative "hangman"
 
 # handles the gameloop
 class Game
-  def initialize
+  def initialize(hangman = nil)
     Dictionary.check
     difficulty = prompt_difficulty until difficulty
-    @hangman = Hangman.new(Dictionary.choose_word(difficulty))
+    @hangman = if hangman.nil?
+                 Hangman.new(Dictionary.choose_word(difficulty))
+               else
+                 hangman
+               end
   end
 
   def play
