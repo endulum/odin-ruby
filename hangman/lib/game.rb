@@ -75,8 +75,10 @@ class Game
     input = CLI.read_input("Enter a letter, or guess the word")
     if input.length == 1
       handle_char_guess(input)
-    else
+    elsif input.length > 1
       handle_word_guess(input)
+    else
+      false
     end
   end
 
