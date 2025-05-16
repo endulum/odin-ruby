@@ -39,3 +39,12 @@ describe "concealed word" do
     expect(hangman.concealed_word).to eq "l a c _ a _ a _ _ c a l"
   end
 end
+
+describe "export" do
+  hangman = Hangman.new("lackadasical")
+  %w[a c l x y z whimsical].each { |g| hangman.evaluate_guess(g) }
+  it "converts to messagepack and back" do
+    hangman_copy = Hangman.from_mpack(hangman.to_mpack)
+    expect(hangman == hangman_copy).to be true
+  end
+end

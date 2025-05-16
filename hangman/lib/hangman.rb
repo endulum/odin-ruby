@@ -1,12 +1,14 @@
+require "msgpack"
+
 # handles the word and stores guesses
 class Hangman
   attr_reader :incorrect_words, :incorrect_chars, :correct_chars
 
-  def initialize(word)
+  def initialize(word, incorrect_words = [], incorrect_chars = [], correct_chars = [])
     @word = word
-    @incorrect_words = []
-    @incorrect_chars = []
-    @correct_chars = []
+    @incorrect_words = incorrect_words
+    @incorrect_chars = incorrect_chars
+    @correct_chars = correct_chars
   end
 
   def char_already_guessed?(char)
@@ -36,4 +38,30 @@ class Hangman
       @correct_chars.include?(char) ? char : "_"
     end.join(" ")
   end
+
+  def to_mpack
+    {
+      word: @word,
+      incorrect_chars: @incorrect_chars,
+      correct_chars: @correct_chars,
+      incorrect_words: @incorrect_words
+    }.to_msgpack
+  end
+
+  def self.from_mpack(string)
+    data = MessagePack.unpack(string)
+    new(data["word"], data["incorrect_words"], data["incorrect_chars"], data["correct_chars"])
+  end
+
+  def ==(other)
+    self.class == other.class &&
+      @word == other.word &&
+      @incorrect_words.join == other.incorrect_words.join &&
+      @incorrect_chars.join == other.incorrect_chars.join &&
+      @correct_chars.join == other.correct_chars.join
+  end
+
+  protected
+
+  attr_reader :word
 end
