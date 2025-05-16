@@ -33,9 +33,9 @@ class Game
 
   def end_of_game?(result)
     if result
-      return print_guess_win
+      return print_guess_win(result)
     elsif @hangman.concealed_word.delete(" ").count("_").zero?
-      return print_reveal_win
+      return print_reveal_win(@hangman.concealed_word.delete(" "))
     elsif @hangman.incorrect_chars.length + @hangman.incorrect_words.length == 6
       return print_guess_lose
     end
@@ -43,14 +43,14 @@ class Game
     false
   end
 
-  def print_guess_win
+  def print_guess_win(result)
     CLI.bprint("\nThe word was #{result}! You won!")
     true
   end
 
-  def print_reveal_win
+  def print_reveal_win(result)
     print_game
-    CLI.bprint("\nYou revealed the word, which was \"#{@hangman.concealed_word.delete(' ')}\"! You won!")
+    CLI.bprint("\nYou revealed the word, which was \"#{result}\"! You won!")
     true
   end
 
@@ -73,7 +73,9 @@ class Game
 
   def prompt_guess
     input = CLI.read_input("Enter a letter, or guess the word")
-    if input.length == 1
+    if input == "save"
+      handle_save
+    elsif input.length == 1
       handle_char_guess(input)
     elsif input.length > 1
       handle_word_guess(input)
@@ -98,5 +100,10 @@ class Game
     else
       word
     end
+  end
+
+  def handle_save
+    p @hangman.to_mpack
+    nil
   end
 end
