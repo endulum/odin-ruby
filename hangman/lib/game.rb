@@ -1,17 +1,18 @@
 require_relative "cli"
 require_relative "dictionary"
 require_relative "hangman"
+require_relative "saving"
 
 # handles the gameloop
 class Game
   def initialize(hangman = nil)
-    Dictionary.check
-    difficulty = prompt_difficulty until difficulty
-    @hangman = if hangman.nil?
-                 Hangman.new(Dictionary.choose_word(difficulty))
-               else
-                 hangman
-               end
+    if hangman.nil?
+      Dictionary.check
+      difficulty = prompt_difficulty until difficulty
+      @hangman = Hangman.new(Dictionary.choose_word(difficulty))
+    else
+      @hangman = hangman
+    end
   end
 
   def play
@@ -103,7 +104,8 @@ class Game
   end
 
   def handle_save
-    p @hangman.to_mpack
+    Saving.save(@hangman)
+    CLI.bprint "Successfully saved this game."
     nil
   end
 end
