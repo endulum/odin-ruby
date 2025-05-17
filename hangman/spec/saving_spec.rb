@@ -57,4 +57,12 @@ describe "save file management" do
     loaded_game = Saving.load_by_index(1)
     expect(loaded_game.concealed_word).to eq target_entry.match(/"([^"]*)"/)[1]
   end
+
+  it "deletes a game based in index selection" do
+    entries = Saving.show_save_entries
+    target_entry = entries[0]
+    Saving.delete_by_index(1)
+    new_entries = Saving.show_save_entries
+    expect(new_entries.include?(target_entry)).to be false
+  end
 end

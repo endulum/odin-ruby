@@ -15,23 +15,26 @@ module Saving
 
   def self.read_save_files
     @saves = []
-    Dir.children(DIR).each do |entry|
-      File.open("#{DIR}/#{entry}") do |f|
+    Dir.children(DIR).each do |filename|
+      File.open("#{DIR}/#{filename}") do |f|
         @saves.push({
                       game: Hangman.from_mpack(f.readlines[0]),
-                      id: entry.delete(".mpk"),
+                      filename: filename,
                       timestamp: f.atime
                     })
       end
     end
   end
 
+  def self.sort_save_files
+    @saves = @saves.sort_by { |s| s[:timestamp] }
+  end
+
   def self.show_save_entries
     read_save_files
-    @saves.sort_by { |s| s[:timestamp] }.each_with_index.map do |save, index|
-      "[#{
-        index + 1
-      }] #{
+    sort_save_files
+    @saves.each_with_index.map do |save, index|
+      "[#{index + 1}] #{
         Time.at(save[:timestamp]).strftime('%B %-d, %Y, %H:%M')
       } : \"#{
         save[:game].concealed_word
@@ -41,5 +44,10 @@ module Saving
 
   def self.load_by_index(index)
     @saves[index - 1][:game]
+  end
+
+  def self.delete_by_index(index)
+    target_filename = @saves[index - 1][:filename]
+    File.delete("#{DIR}/#{target_filename}")
   end
 end
