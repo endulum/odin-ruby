@@ -7,12 +7,12 @@ module Dictionary
 
   def self.check
     if @words&.length&.positive?
-      CLI.bprint "Dictionary already loaded."
+      # CLI.bprint "Dictionary already loaded."
     elsif File.exist? "./data/dictionary.txt"
-      CLI.bprint "Dictionary file exists."
+      # CLI.bprint "Dictionary file exists."
       load
     else
-      CLI.bprint "Dictionary file does not exist."
+      # CLI.bprint "Dictionary file does not exist."
       download
     end
   end

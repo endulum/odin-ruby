@@ -20,4 +20,13 @@ module CLI
     print "\n#{text ? "#{text} " : ''}#{prefix}".colorize(color: color)
     gets.chomp
   end
+
+  def self.prompt_answer(accepted_inputs = %w[y n])
+    loop do
+      input = read_input
+      return input if accepted_inputs.include?(input)
+
+      CLI.bprint "Not a valid input: #{input}. Accepted inputs are #{accepted_inputs}"
+    end
+  end
 end
