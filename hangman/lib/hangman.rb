@@ -26,7 +26,6 @@ class Hangman
       @incorrect_words.push(guess)
     elsif @word.chars.include?(guess)
       @correct_chars.push(guess)
-      # return @word if concealed_word.delete(" ") == @word
     else
       @incorrect_chars.push(guess)
     end
