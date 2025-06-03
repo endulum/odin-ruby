@@ -51,6 +51,18 @@ module HashMap
       nil
     end
 
+    def remove_node_by_key(key)
+      if @head && @head.key == key # check head first
+        @head = @head.next
+      else
+        each do |node|
+          next unless node.next && node.next.key == key
+
+          node.next = (node.next.next || nil)
+        end
+      end
+    end
+
     def to_string
       string = ""
       each { |node| string += "{ \"#{node.key}\" => \"#{node.value}\" } -> " }
@@ -90,6 +102,14 @@ module HashMap
 
       node = bucket.find_node_by_key(key)
       node&.value
+    end
+
+    def remove(key)
+      index = hash(key)
+      bucket = @bucket_array[index]
+      return unless bucket
+
+      bucket.remove_node_by_key(key)
     end
 
     def each(&)

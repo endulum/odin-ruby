@@ -45,4 +45,8 @@ describe "basics" do
     hashmap.set(target_animal, "none")
     expect(hashmap.get(target_animal)).to eq "none"
   end
+
+  it "#remove: should remove a value by key" do
+    hashmap.remove(target_animal)
+  end
 end
