@@ -48,5 +48,6 @@ describe "basics" do
 
   it "#remove: should remove a value by key" do
     hashmap.remove(target_animal)
+    expect(hashmap.get(target_animal)).to eq nil
   end
 end
