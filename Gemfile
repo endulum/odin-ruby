@@ -7,3 +7,5 @@ source "https://rubygems.org"
 gem "rubocop", "~> 1.75"
 gem 'rubocop-performance', require: false
 gem "colorize", "~> 1.1"
+
+gem "faker", "~> 3.5"
