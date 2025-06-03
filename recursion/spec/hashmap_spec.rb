@@ -5,8 +5,10 @@ hashmap = HashMap::Map.new
 
 # prepare a sample "Animals" hash for use
 
+ANIMAL_COUNT = 5
+
 animals = {}
-until animals.keys.length >= 50
+until animals.keys.length >= ANIMAL_COUNT
   name = Faker::Creature::Animal.name
   animals[name] = Faker::Color.color_name
 end
@@ -21,22 +23,26 @@ describe "hashing" do
   end
 end
 
-describe "methods" do
-  it "should place key-value pairs in buckets without error" do
-    animals.each do |key, value|
-      hashmap.set(key, value)
-    end
-  end
-
-  it "should iterate through buckets without error" do
-    hashmap.each do |bucket|
-      puts bucket.nil? ? "nil" : bucket.to_string
-    end
+describe "individual getting and setting" do
+  it "should place a value as a list node" do
+    animals.each { |key, value| hashmap.set(key, value) }
+    total = 0
+    hashmap.each { |bucket| bucket&.each { total += 1 } }
+    expect(total).to eq ANIMAL_COUNT
   end
 
   target_animal = animals.keys[0]
 
-  it "should overwrite a value without error" do
+  it "should get a value by key" do
+    expect(hashmap.get(target_animal)).to eq animals[target_animal]
+  end
+
+  it "should not get a value for nonexistent key" do
+    expect(hashmap.get("human")).to be_nil
+  end
+
+  it "should overwrite a value" do
     hashmap.set(target_animal, "none")
+    expect(hashmap.get(target_animal)).to eq "none"
   end
 end

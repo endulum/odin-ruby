@@ -83,6 +83,15 @@ module HashMap
       end
     end
 
+    def get(key)
+      index = hash(key)
+      bucket = @bucket_array[index]
+      return nil unless bucket
+
+      node = bucket.find_node_by_key(key)
+      node&.value
+    end
+
     def each(&)
       @bucket_array.each(&)
     end
