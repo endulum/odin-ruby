@@ -25,45 +25,47 @@ end
 
 describe "basics" do
   it "#set: should place a value as a list node" do
-    animals.each { |key, value| hashmap.set(key, value) }
-    total = 0
-    hashmap.each { |bucket| bucket&.each { total += 1 } }
-    expect(total).to eq ANIMAL_COUNT
+    hashmap.set("unicorn", "rainbow")
   end
 
-  target_animal = animals.keys[0]
-
-  it "#get: should get a value by key" do
-    expect(hashmap.get(target_animal)).to eq animals[target_animal]
+  it "#get: should return a value by key" do
+    expect(hashmap.get("unicorn")).to eq "rainbow"
   end
 
-  it "#get: should not get a value for nonexistent key" do
+  it "#get: should not get a value for a nonexistent key" do
     expect(hashmap.get("human")).to be_nil
   end
 
   it "#set: should overwrite a value" do
-    hashmap.set(target_animal, "none")
-    expect(hashmap.get(target_animal)).to eq "none"
+    hashmap.set("unicorn", "prismatic")
+    expect(hashmap.get("unicorn")).to eq "prismatic"
   end
 
   it "#remove: should remove a value by key" do
-    hashmap.remove(target_animal)
-    expect(hashmap.get(target_animal)).to eq nil
+    hashmap.remove("unicorn")
+    expect(hashmap.get("unicorn")).to eq nil
   end
 end
 
 describe "enumerated" do
-  # it "#length: should get the total of stored keys" do
-  # end
+  it "#each: should enumerate without error" do
+    animals.each { |key, value| hashmap.set(key, value) }
+  end
+
+  it "#length: should get the total of stored keys" do
+    expect(hashmap.length).to eq animals.keys.length
+  end
 
   it "#keys: should get all stored keys" do
-    expect(hashmap.keys).to match_array animals.keys.drop(1)
+    expect(hashmap.keys).to match_array animals.keys
   end
 
   it "#values: should get all stored values" do
-    expect(hashmap.values).to match_array animals.values.drop(1)
+    expect(hashmap.values).to match_array animals.values
   end
 
-  # it "#entries: should get all stored key-value pairs" do
-  # end
+  it "#entries: should get all stored key-value pairs" do
+    pairs = animals.each.map { |pair| pair }
+    expect(hashmap.entries).to match_array pairs
+  end
 end

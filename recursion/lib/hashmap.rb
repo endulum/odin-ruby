@@ -110,10 +110,17 @@ module HashMap
       return unless bucket
 
       bucket.remove_node_by_key(key)
+      @bucket_array[index] = nil if bucket.head.nil?
     end
 
     def each(&)
       @bucket_array.each(&)
+    end
+
+    def length
+      total = 0
+      each { |bucket| bucket&.each { total += 1 } }
+      total
     end
 
     def keys
@@ -126,6 +133,12 @@ module HashMap
       total_values = []
       each { |bucket| bucket&.each { |node| total_values.push node.value } }
       total_values
+    end
+
+    def entries
+      total_entries = []
+      each { |bucket| bucket&.each { |node| total_entries.push [node.key, node.value] } }
+      total_entries
     end
 
     private
