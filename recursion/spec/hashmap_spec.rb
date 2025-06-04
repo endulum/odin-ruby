@@ -5,7 +5,7 @@ hashmap = HashMap::Map.new
 
 # prepare a sample "Animals" hash for use
 
-ANIMAL_COUNT = 5
+ANIMAL_COUNT = 12
 
 animals = {}
 until animals.keys.length >= ANIMAL_COUNT
@@ -50,4 +50,20 @@ describe "basics" do
     hashmap.remove(target_animal)
     expect(hashmap.get(target_animal)).to eq nil
   end
+end
+
+describe "enumerated" do
+  # it "#length: should get the total of stored keys" do
+  # end
+
+  it "#keys: should get all stored keys" do
+    expect(hashmap.keys).to match_array animals.keys.drop(1)
+  end
+
+  it "#values: should get all stored values" do
+    expect(hashmap.values).to match_array animals.values.drop(1)
+  end
+
+  # it "#entries: should get all stored key-value pairs" do
+  # end
 end

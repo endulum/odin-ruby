@@ -116,6 +116,18 @@ module HashMap
       @bucket_array.each(&)
     end
 
+    def keys
+      total_keys = []
+      each { |bucket| bucket&.each { |node| total_keys.push node.key } }
+      total_keys
+    end
+
+    def values
+      total_values = []
+      each { |bucket| bucket&.each { |node| total_values.push node.value } }
+      total_values
+    end
+
     private
 
     def to_new_bucket(index, key, value)
