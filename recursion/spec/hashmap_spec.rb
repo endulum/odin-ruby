@@ -51,7 +51,7 @@ describe "enumerated" do
   it "#each: should enumerate" do
     animals.each { |key, value| hashmap.set(key, value) }
     enumerated_animals = []
-    hashmap.each { |bucket| bucket&.each { |node| enumerated_animals.push(node.key) } }
+    hashmap.each_bucket { |bucket| bucket.each { |node| enumerated_animals.push(node.key) } }
     expect(enumerated_animals).to match_array animals.keys
   end
 
@@ -76,6 +76,7 @@ end
 describe "clear" do
   it "should remove all entries" do
     hashmap.clear
+    expect(hashmap.length).to eq 0
     expect(hashmap.keys).to eq []
   end
 end

@@ -46,12 +46,18 @@ module HashMap
       end
     end
 
-    def find_node_by_key(key)
+    def length
+      total = 0
+      each { total += 1 }
+      total
+    end
+
+    def find_by_key(key)
       each { |node| return node if node.key == key }
       nil
     end
 
-    def remove_node_by_key(key)
+    def remove_by_key(key)
       if @head && @head.key == key # check head first
         @head = @head.next
       else
@@ -78,7 +84,8 @@ module HashMap
       @bucket_array = Array.new(@size)
       @bucket_count = 0
       @entry_count = 0
-      @load_factor = 0.8
+      @load_factor = 0.75
+      @load_factor.freeze
     end
 
     def hash(key)
@@ -88,56 +95,55 @@ module HashMap
 
     def set(key, value)
       index = hash(key)
-      if @bucket_array[index].nil?
-        to_new_bucket(index, key, value)
-      else
-        to_existing_bucket(index, key, value)
-      end
+      add_bucket(index) if @bucket_array[index].nil?
+      list = @bucket_array[index]
+      add_key(list, key, value)
     end
 
     def get(key)
       index = hash(key)
-      bucket = @bucket_array[index]
-      return nil unless bucket
+      list = @bucket_array[index]
+      return nil if list.nil?
 
-      node = bucket.find_node_by_key(key)
-      node&.value
+      get_key(list, key)
     end
 
     def remove(key)
       index = hash(key)
-      bucket = @bucket_array[index]
-      return unless bucket
+      list = @bucket_array[index]
+      return if list.nil?
 
-      bucket.remove_node_by_key(key)
-      @bucket_array[index] = nil if bucket.head.nil?
+      remove_key(list, key)
+      remove_bucket(index) if list.head.nil?
     end
 
     def each(&)
       @bucket_array.each(&)
     end
 
+    def each_bucket(&)
+      @bucket_array.compact.each(&)
+    end
+
     def length
-      total = 0
-      each { |bucket| bucket&.each { total += 1 } }
-      total
+      @entry_count
     end
 
     def keys
       total_keys = []
-      each { |bucket| bucket&.each { |node| total_keys.push node.key } }
+      each_bucket { |bucket| bucket.each { |node| total_keys.push node.key } }
       total_keys
     end
 
     def values
       total_values = []
-      each { |bucket| bucket&.each { |node| total_values.push node.value } }
+      each_bucket { |bucket| bucket.each { |node| total_values.push node.value } }
       total_values
     end
 
     def entries
       total_entries = []
-      each { |bucket| bucket&.each { |node| total_entries.push [node.key, node.value] } }
+      each_bucket { |bucket| bucket.each { |node| total_entries.push [node.key, node.value] } }
       total_entries
     end
 
@@ -149,31 +155,38 @@ module HashMap
 
     private
 
-    def to_new_bucket(index, key, value)
-      new_list = HashMap::List.new
-      new_list.append(key, value)
-      @bucket_array[index] = new_list
-      @bucket_count += 1
-      @entry_count += 1
-    end
-
-    def to_existing_bucket(index, key, value)
-      list = @bucket_array[index]
-      existing_node = list.find_node_by_key(key)
+    def add_key(list, key, value)
+      existing_node = list.find_by_key(key)
       if existing_node
-        overwrite_value(existing_node, value)
+        existing_node.value = value
       else
-        add_value(list, key, value)
+        list.append(key, value)
+        @entry_count += 1
       end
     end
 
-    def add_value(list, key, value)
-      list.append(key, value)
-      @entry_count += 1
+    def get_key(list, key)
+      value = nil
+      list.each { |node| value = node.value if node.key == key }
+      value
     end
 
-    def overwrite_value(node, value)
-      node.value = value
+    def remove_key(list, key)
+      list.remove_by_key(key)
+      @entry_count -= 1
+    end
+
+    def add_bucket(index)
+      new_list = HashMap::List.new
+      @bucket_array[index] = new_list
+      @bucket_count += 1
+    end
+
+    def remove_bucket(index)
+      list = @bucket_array[index]
+      @entry_count -= list.length
+      @bucket_array[index] = nil
+      @bucket_count -= 1
     end
   end
 end
