@@ -141,6 +141,12 @@ module HashMap
       total_entries
     end
 
+    def clear
+      @bucket_array.map! { nil }
+      @entry_count = 0
+      @bucket_count = 0
+    end
+
     private
 
     def to_new_bucket(index, key, value)

@@ -72,3 +72,10 @@ describe "enumerated" do
     expect(hashmap.entries).to match_array pairs
   end
 end
+
+describe "clear" do
+  it "should remove all entries" do
+    hashmap.clear
+    expect(hashmap.keys).to eq []
+  end
+end
