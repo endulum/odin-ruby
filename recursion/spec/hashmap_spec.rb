@@ -80,3 +80,18 @@ describe "clear" do
     expect(hashmap.keys).to eq []
   end
 end
+
+describe "growing" do
+  it "should calculate threshold" do
+    animals.each do |key, value|
+      hashmap.set(key, value)
+      expect(hashmap.should_grow?).to be false
+    end
+    expect(hashmap.threshold).to eq 12.8
+  end
+
+  it "should trigger growth" do
+    hashmap.set("unicorn", "rainbow")
+    # check...
+  end
+end

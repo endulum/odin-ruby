@@ -79,12 +79,12 @@ module HashMap
 
   # HashMap map
   class Map
-    def initialize
+    def initialize(load_factor = 0.8)
       @size = 16
       @bucket_array = Array.new(@size)
       @bucket_count = 0
       @entry_count = 0
-      @load_factor = 0.75
+      @load_factor = load_factor
       @load_factor.freeze
     end
 
@@ -153,6 +153,14 @@ module HashMap
       @bucket_count = 0
     end
 
+    def threshold
+      @size * @load_factor
+    end
+
+    def should_grow?
+      threshold < @entry_count
+    end
+
     private
 
     def add_key(list, key, value)
@@ -162,6 +170,7 @@ module HashMap
       else
         list.append(key, value)
         @entry_count += 1
+        grow_buckets if should_grow?
       end
     end
 
@@ -187,6 +196,11 @@ module HashMap
       @entry_count -= list.length
       @bucket_array[index] = nil
       @bucket_count -= 1
+    end
+
+    def grow_buckets
+      puts "Buckets are being grown"
+      # grow buckets...
     end
   end
 end
