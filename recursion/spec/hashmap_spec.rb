@@ -91,7 +91,16 @@ describe "growing" do
   end
 
   it "should trigger growth" do
+    expect(hashmap.size).to eq 16
     hashmap.set("unicorn", "rainbow")
-    # check...
+    expect(hashmap.size).to eq 32
+  end
+
+  it "should have all existing keys" do
+    expect(hashmap.get("unicorn")).to eq "rainbow"
+    animals.each do |key, value|
+      expect(hashmap.hash(key)).to be_between(0, 32)
+      expect(hashmap.get(key)).to eq value
+    end
   end
 end

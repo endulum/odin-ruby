@@ -79,13 +79,13 @@ module HashMap
 
   # HashMap map
   class Map
-    def initialize(load_factor = 0.8)
+    attr_reader :size, :length
+
+    def initialize
       @size = 16
       @bucket_array = Array.new(@size)
       @bucket_count = 0
-      @entry_count = 0
-      @load_factor = load_factor
-      @load_factor.freeze
+      @length = 0
     end
 
     def hash(key)
@@ -125,10 +125,6 @@ module HashMap
       @bucket_array.compact.each(&)
     end
 
-    def length
-      @entry_count
-    end
-
     def keys
       total_keys = []
       each_bucket { |bucket| bucket.each { |node| total_keys.push node.key } }
@@ -149,16 +145,16 @@ module HashMap
 
     def clear
       @bucket_array.map! { nil }
-      @entry_count = 0
+      @length = 0
       @bucket_count = 0
     end
 
     def threshold
-      @size * @load_factor
+      @size * 0.8
     end
 
     def should_grow?
-      threshold < @entry_count
+      threshold < @length
     end
 
     private
@@ -169,7 +165,7 @@ module HashMap
         existing_node.value = value
       else
         list.append(key, value)
-        @entry_count += 1
+        @length += 1
         grow_buckets if should_grow?
       end
     end
@@ -182,7 +178,7 @@ module HashMap
 
     def remove_key(list, key)
       list.remove_by_key(key)
-      @entry_count -= 1
+      @length -= 1
     end
 
     def add_bucket(index)
@@ -193,14 +189,16 @@ module HashMap
 
     def remove_bucket(index)
       list = @bucket_array[index]
-      @entry_count -= list.length
+      @length -= list.length
       @bucket_array[index] = nil
       @bucket_count -= 1
     end
 
     def grow_buckets
-      puts "Buckets are being grown"
-      # grow buckets...
+      @size *= 2
+      old_buckets = @bucket_array.dup
+      clear
+      old_buckets.compact.each { |bucket| bucket.each { |node| set(node.key, node.value) } }
     end
   end
 end
