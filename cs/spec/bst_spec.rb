@@ -37,3 +37,18 @@ describe "enumeration with block" do
     expect(levelorder).to eq [5, 2, 8, 1, 3, 6, 9, 4, 7, 10]
   end
 end
+
+describe "balancing" do
+  balanced_tree = BST::Tree.new((1..30).to_a)
+  unbalanced_tree = BST::Tree.new((1..100).to_a.sample(30))
+
+  it "should determine if a tree is balanced" do
+    expect(balanced_tree.balanced?).to be true
+    expect(unbalanced_tree.balanced?).to be false
+  end
+
+  it "should balance a tree" do
+    unbalanced_tree.balance
+    expect(unbalanced_tree.balanced?).to be true
+  end
+end

@@ -91,6 +91,32 @@ module BST
       end
     end
 
+    def height(node = @root)
+      return -1 unless node
+
+      left_height = height(node.left)
+      right_height = height(node.right)
+      [left_height, right_height].max + 1
+    end
+
+    def balanced?(node = @root)
+      return true unless node
+
+      left_height = height(node.left)
+      right_height = height(node.right)
+      return true if balanced?(node.left) && balanced?(node.right) && (left_height - right_height).abs <= 1
+
+      false
+    end
+
+    def balance
+      return if balanced?
+
+      data = []
+      inorder { |node| data.push(node.value) }
+      @root = build(data, 0, data.length - 1)
+    end
+
     def pretty_print(node = @root, prefix = "", is_left = true)
       pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
       puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
