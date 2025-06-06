@@ -19,6 +19,16 @@ module BST
 
       raise "Values #{@value} and #{other.value} could not be compared."
     end
+
+    def self.insert_child(new_node, node)
+      return if new_node == node
+
+      if new_node > node
+        node.right.nil? ? node.right = new_node : insert_child(new_node, node.right)
+      elsif new_node < node
+        node.left.nil? ? node.left = new_node : insert_child(new_node, node.left)
+      end
+    end
   end
 
   # Binary search tree
@@ -49,7 +59,7 @@ module BST
       if @root.nil?
         @root = new_node
       else
-        add_node(new_node, @root)
+        Node.insert_child(new_node, @root)
         balance if balance_after
       end
     end
@@ -140,16 +150,6 @@ module BST
       while queue.length.positive?
         value = queue.pop
         insert(value)
-      end
-    end
-
-    def add_node(new_node, node)
-      return if new_node == node
-
-      if new_node > node
-        node.right.nil? ? node.right = new_node : add_node(new_node, node.right)
-      elsif new_node < node
-        node.left.nil? ? node.left = new_node : add_node(new_node, node.left)
       end
     end
   end
