@@ -139,23 +139,14 @@ module BST
       end
     end
 
-    def all(type)
+    def all(type = :inorder)
       all = []
-      case type
-        when "inorder"
-          inorder { |node| all.push(node.value) }
-        when "postorder"
-          postorder { |node| all.push(node.value) }
-        when "preorder"
-          preorder { |node| all.push(node.value) }
-      end
+      add_to_all = ->(node) { all.push(node.value) }
+      inorder add_to_all if type == :inorder
+      postorder add_to_all if type == :postorder
+      preorder add_to_all if type == :preorder
+      levelorder add_to_all if type == :levelorder
       all
-    end
-
-    def total_nodes
-      total = 0
-      inorder { total += 1 }
-      total
     end
 
     def height(node = @root)

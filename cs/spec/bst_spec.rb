@@ -15,31 +15,19 @@ describe "enumeration with block" do
   tree = BST::Tree.new((1..10).to_a)
 
   it "should recurse in preorder" do
-    preorder = []
-    tree.preorder { |node| preorder.push(node.value) }
-    expect(preorder).to eq [5, 2, 1, 3, 4, 8, 6, 7, 9, 10]
+    expect(tree.all(:preorder)).to eq [5, 2, 1, 3, 4, 8, 6, 7, 9, 10]
   end
 
   it "should recurse in postorder" do
-    postorder = []
-    tree.postorder { |node| postorder.push(node.value) }
-    expect(postorder).to eq [1, 4, 3, 2, 7, 6, 10, 9, 8, 5]
+    expect(tree.all(:postorder)).to eq [1, 4, 3, 2, 7, 6, 10, 9, 8, 5]
   end
 
   it "should recurse in inorder" do
-    inorder = []
-    tree.inorder { |node| inorder.push(node.value) }
-    expect(inorder).to eq [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    expect(tree.all(:inorder)).to eq [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   end
 
   it "should iterate in levelorder" do
-    levelorder = []
-    tree.levelorder { |node| levelorder.push(node.value) }
-    expect(levelorder).to eq [5, 2, 8, 1, 3, 6, 9, 4, 7, 10]
-  end
-
-  it "should get correct total of nodes" do
-    expect(tree.total_nodes).to eq 10
+    expect(tree.all(:levelorder)).to eq [5, 2, 8, 1, 3, 6, 9, 4, 7, 10]
   end
 end
 
@@ -58,7 +46,7 @@ describe "balancing" do
   end
 end
 
-describe "insertion and deletion" do
+describe "insertion" do
   it "should insert, respecting the `balance_after` option" do
     tree = BST::Tree.new []
     (1..10).each { |value| tree.insert(value) }
@@ -74,7 +62,9 @@ describe "insertion and deletion" do
     tree.insert(1)
     expect(tree.total_nodes).to eq 1
   end
+end
 
+describe "deletion" do
   it "should delete, respecting the `balance_after` option" do
     numbers = (1..10).to_a
 
