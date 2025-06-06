@@ -1,3 +1,4 @@
+require "pry-byebug"
 require_relative "../lib/bst"
 
 describe "node comparison" do
@@ -72,5 +73,27 @@ describe "insertion and deletion" do
     expect(tree.total_nodes).to eq 1
     tree.insert(1)
     expect(tree.total_nodes).to eq 1
+  end
+
+  it "should delete, respecting the `balance_after` option" do
+    numbers = (1..10).to_a
+
+    tree = BST::Tree.new(numbers)
+    numbers.each_with_index do |number, index|
+      tree.remove(number)
+      expect(tree.total_nodes).to eq numbers.length - index - 1
+    end
+
+    other_tree = BST::Tree.new(numbers)
+    numbers.each do |number|
+      other_tree.remove(number, balance_after: true)
+      expect(other_tree.balanced?).to be true
+    end
+  end
+
+  it "should not delete nonexistent values" do
+    tree = BST::Tree.new((1..3).to_a)
+    tree.remove(5)
+    expect(tree.total_nodes).to eq 3
   end
 end

@@ -2,9 +2,7 @@ module BST
   # Binary search tree node
   class Node
     include Comparable
-
-    attr_reader :value
-    attr_accessor :left, :right
+    attr_accessor :value, :left, :right
 
     def initialize(value)
       @value = value
@@ -13,21 +11,54 @@ module BST
     end
 
     def <=>(other)
-      return 0 if @value == other.value
-      return 1 if @value > other.value
-      return -1 if @value < other.value
+      other_value = other.is_a?(Node) ? other.value : other
+      return 0 if @value == other_value
+      return 1 if @value > other_value
+      return -1 if @value < other_value
 
       raise "Values #{@value} and #{other.value} could not be compared."
     end
 
-    def self.insert_child(new_node, node)
+    def self.insert(new_node, node)
       return if new_node == node
 
       if new_node > node
-        node.right.nil? ? node.right = new_node : insert_child(new_node, node.right)
+        node.right.nil? ? node.right = new_node : insert(new_node, node.right)
       elsif new_node < node
-        node.left.nil? ? node.left = new_node : insert_child(new_node, node.left)
+        node.left.nil? ? node.left = new_node : insert(new_node, node.left)
       end
+    end
+
+    def self.remove(value, node)
+      if node > value
+        node.left = remove(value, node.left) if node.left
+      elsif node < value
+        node.right = remove(value, node.right) if node.right
+      else
+        return node.right unless node.left
+        return node.left unless node.right
+
+        move_successor(node)
+      end
+      node
+    end
+
+    def self.move_successor(node)
+      successor = successor_of(node)
+      node.value = successor_of(node).value
+      node.right = remove(successor.value, node.right)
+    end
+
+    def self.successor_of(node)
+      node = node.right
+      node = node.left while node&.left
+      node
+    end
+
+    def self.pretty_print(node, prefix = "", is_left: true)
+      pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", is_left: false) if node.right
+      puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
+      pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", is_left: true) if node.left
     end
   end
 
@@ -59,9 +90,16 @@ module BST
       if @root.nil?
         @root = new_node
       else
-        Node.insert_child(new_node, @root)
+        Node.insert(new_node, @root)
         balance if balance_after
       end
+    end
+
+    def remove(value, balance_after: false)
+      return if @root.nil?
+
+      @root = Node.remove(value, @root)
+      balance if balance_after
     end
 
     def preorder(node = @root, &)
@@ -101,6 +139,19 @@ module BST
       end
     end
 
+    def all(type)
+      all = []
+      case type
+        when "inorder"
+          inorder { |node| all.push(node.value) }
+        when "postorder"
+          postorder { |node| all.push(node.value) }
+        when "preorder"
+          preorder { |node| all.push(node.value) }
+      end
+      all
+    end
+
     def total_nodes
       total = 0
       inorder { total += 1 }
@@ -133,10 +184,8 @@ module BST
       @root = build(data, 0, data.length - 1)
     end
 
-    def pretty_print(node = @root, prefix = "", is_left: true)
-      pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", is_left: false) if node.right
-      puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
-      pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", is_left: true) if node.left
+    def pretty_print
+      Node.pretty_print(@root)
     end
 
     private
