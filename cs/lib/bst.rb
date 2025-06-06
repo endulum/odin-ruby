@@ -55,18 +55,24 @@ module BST
     end
 
     def preorder(node = @root, &)
+      return unless node
+
       yield node
       preorder(node.left, &) if node.left
       preorder(node.right, &) if node.right
     end
 
     def inorder(node = @root, &)
+      return unless node
+
       inorder(node.left, &) if node.left
       yield node
       inorder(node.right, &) if node.right
     end
 
     def postorder(node = @root, &)
+      return unless node
+
       postorder(node.left, &) if node.left
       postorder(node.right, &) if node.right
       yield node
