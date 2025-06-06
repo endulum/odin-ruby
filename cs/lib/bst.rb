@@ -23,15 +23,14 @@ module BST
 
   # Binary search tree
   class Tree
-    def initialize(data)
+    def initialize(data, balance_after: true)
       # initialize can take ANY array, and determine what to do if sorted or not
-      if data.sort == data
+      if data.sort == data # data is already sorted, use recursive build
         @root = build(data, 0, data.length - 1)
-        # data is already sorted, use recursive build
-      else
+
+      else # data isn't sorted, use iterative adding
         add_data(data)
-        # data isn't sorted, use iterative adding
-        # TODO: balancing afterward
+        balance if balance_after
       end
     end
 
@@ -117,10 +116,10 @@ module BST
       @root = build(data, 0, data.length - 1)
     end
 
-    def pretty_print(node = @root, prefix = "", is_left = true)
-      pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
+    def pretty_print(node = @root, prefix = "", is_left: true)
+      pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", is_left: false) if node.right
       puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
-      pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
+      pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", is_left: true) if node.left
     end
 
     private

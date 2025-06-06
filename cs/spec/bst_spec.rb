@@ -40,7 +40,7 @@ end
 
 describe "balancing" do
   balanced_tree = BST::Tree.new((1..30).to_a)
-  unbalanced_tree = BST::Tree.new((1..100).to_a.sample(30))
+  unbalanced_tree = BST::Tree.new((1..100).to_a.sample(30), balance_after: false)
 
   it "should determine if a tree is balanced" do
     expect(balanced_tree.balanced?).to be true
