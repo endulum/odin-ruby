@@ -142,10 +142,10 @@ module BST
     def all(type = :inorder)
       all = []
       add_to_all = ->(node) { all.push(node.value) }
-      inorder add_to_all if type == :inorder
-      postorder add_to_all if type == :postorder
-      preorder add_to_all if type == :preorder
-      levelorder add_to_all if type == :levelorder
+      inorder(&add_to_all) if type == :inorder
+      postorder(&add_to_all) if type == :postorder
+      preorder(&add_to_all) if type == :preorder
+      levelorder(&add_to_all) if type == :levelorder
       all
     end
 
