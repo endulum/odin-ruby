@@ -64,7 +64,7 @@ module BST
 
   # Binary search tree
   class Tree
-    def initialize(data, balance_after: true)
+    def initialize(data = [], balance_after: true)
       # initialize can take ANY array, and determine what to do if sorted or not
       if data.sort == data && data.uniq == data # data is ready, use recursive build
         @root = build(data, 0, data.length - 1)
@@ -143,6 +143,14 @@ module BST
       all = []
       send(type) { |node| all.push(node.value) } if %i[inorder preorder postorder levelorder].include? type
       all
+    end
+
+    def find(value, node = @root)
+      return node if node == value
+      return find(value, node.left) if node > value
+      return find(value, node.right) if node < value
+
+      nil
     end
 
     def height(node = @root)

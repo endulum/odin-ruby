@@ -87,3 +87,14 @@ describe "deletion" do
     expect(tree.all.length).to eq 3
   end
 end
+
+describe "finding" do
+  numbers = (1..10).to_a
+  tree = BST::Tree.new(numbers)
+
+  it "should find nodes" do
+    numbers.each do |number|
+      expect(tree.find(number).value).to eq number
+    end
+  end
+end
