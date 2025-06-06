@@ -72,17 +72,16 @@ module BST
       yield node
     end
 
-    def levelorder
-      queue = [@root]
-      visited = []
+    def levelorder(&)
+      queue = [@root].compact
       while queue.length.positive?
-        node = queue.shift
-        next unless node
-
-        yield node
-        visited.push(node)
-        queue.push(node.left) if node.left
-        queue.push(node.right) if node.right
+        queue.each(&)
+        visited = queue.dup
+        queue = []
+        visited.each do |node|
+          queue.push(node.left) if node.left
+          queue.push(node.right) if node.right
+        end
       end
     end
 
