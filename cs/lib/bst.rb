@@ -78,7 +78,7 @@ module BST
     def build(data, start_index, end_index)
       return if start_index > end_index
 
-      middle_index = middle(start_index, end_index)
+      middle_index = (start_index + end_index) / 2
       node = Node.new(data[middle_index])
       node.left = build(data, start_index, middle_index - 1)
       node.right = build(data, middle_index + 1, end_index)
@@ -189,10 +189,6 @@ module BST
     end
 
     private
-
-    def middle(start_index, end_index)
-      start_index + ((end_index - start_index) / 2)
-    end
 
     def add_data(data)
       queue = data.dup
