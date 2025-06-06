@@ -52,3 +52,14 @@ describe "balancing" do
     expect(unbalanced_tree.balanced?).to be true
   end
 end
+
+describe "insertion and deletion" do
+  it "should insert, respecting the `balance_after` option" do
+    tree = BST::Tree.new []
+    (1..10).each { |value| tree.insert(value) }
+    expect(tree.balanced?).to be false
+    other_tree = BST::Tree.new []
+    (1..10).each { |value| other_tree.insert(value, balance_after: true) }
+    expect(other_tree.balanced?).to be true
+  end
+end

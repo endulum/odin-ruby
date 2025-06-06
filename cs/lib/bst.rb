@@ -44,12 +44,13 @@ module BST
       node
     end
 
-    def add(value)
+    def insert(value, balance_after: false)
       new_node = BST::Node.new(value)
       if @root.nil?
         @root = new_node
       else
         add_node(new_node, @root)
+        balance if balance_after
       end
     end
 
@@ -132,7 +133,7 @@ module BST
       queue = data.dup
       while queue.length.positive?
         value = queue.pop
-        add(value)
+        insert(value)
       end
     end
 
