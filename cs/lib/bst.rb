@@ -25,7 +25,7 @@ module BST
   class Tree
     def initialize(data, balance_after: true)
       # initialize can take ANY array, and determine what to do if sorted or not
-      if data.sort == data # data is already sorted, use recursive build
+      if data.sort == data && data.uniq == data # data is ready, use recursive build
         @root = build(data, 0, data.length - 1)
 
       else # data isn't sorted, use iterative adding
@@ -91,6 +91,12 @@ module BST
       end
     end
 
+    def total_nodes
+      total = 0
+      inorder { total += 1 }
+      total
+    end
+
     def height(node = @root)
       return -1 unless node
 
@@ -138,6 +144,8 @@ module BST
     end
 
     def add_node(new_node, node)
+      return if new_node == node
+
       if new_node > node
         node.right.nil? ? node.right = new_node : add_node(new_node, node.right)
       elsif new_node < node

@@ -36,6 +36,10 @@ describe "enumeration with block" do
     tree.levelorder { |node| levelorder.push(node.value) }
     expect(levelorder).to eq [5, 2, 8, 1, 3, 6, 9, 4, 7, 10]
   end
+
+  it "should get correct total of nodes" do
+    expect(tree.total_nodes).to eq 10
+  end
 end
 
 describe "balancing" do
@@ -61,5 +65,12 @@ describe "insertion and deletion" do
     other_tree = BST::Tree.new []
     (1..10).each { |value| other_tree.insert(value, balance_after: true) }
     expect(other_tree.balanced?).to be true
+  end
+
+  it "should not insert duplicates" do
+    tree = BST::Tree.new([1, 1, 1])
+    expect(tree.total_nodes).to eq 1
+    tree.insert(1)
+    expect(tree.total_nodes).to eq 1
   end
 end
