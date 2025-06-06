@@ -24,7 +24,25 @@ module BST
   # Binary search tree
   class Tree
     def initialize(data)
-      add_data(data)
+      # initialize can take ANY array, and determine what to do if sorted or not
+      if data.sort == data
+        @root = build(data, 0, data.length - 1)
+        # data is already sorted, use recursive build
+      else
+        add_data(data)
+        # data isn't sorted, use iterative adding
+        # TODO: balancing afterward
+      end
+    end
+
+    def build(data, start_index, end_index)
+      return if start_index > end_index
+
+      middle_index = middle(start_index, end_index)
+      node = Node.new(data[middle_index])
+      node.left = build(data, start_index, middle_index - 1)
+      node.right = build(data, middle_index + 1, end_index)
+      node
     end
 
     def add(value)
@@ -75,6 +93,10 @@ module BST
     end
 
     private
+
+    def middle(start_index, end_index)
+      start_index + ((end_index - start_index) / 2)
+    end
 
     def add_data(data)
       queue = data.dup
