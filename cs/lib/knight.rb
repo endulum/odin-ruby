@@ -22,6 +22,16 @@ module KnightsTravails
   end
 
   def steps(start_square, end_square)
-    nil
+    paths = [[start_square]]
+
+    until paths.empty?
+      current_path = paths.shift
+      return current_path if current_path.last == end_square
+
+      steps = next_steps(current_path.last)
+      steps.each do |step|
+        paths.push(current_path + [step]) unless current_path.include?(step)
+      end
+    end
   end
 end
