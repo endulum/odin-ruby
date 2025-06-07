@@ -43,22 +43,42 @@ module BST
       node
     end
 
-    def self.move_successor(node)
-      successor = successor_of(node)
-      node.value = successor_of(node).value
-      node.right = remove(successor.value, node.right)
+    def self.find(value, node)
+      return node if node == value
+      return find(value, node.left) if node && node > value
+      return find(value, node.right) if node && node < value
+
+      nil
     end
 
-    def self.successor_of(node)
-      node = node.right
-      node = node.left while node&.left
-      node
+    def self.height(node)
+      return -1 unless node
+
+      left_height = height(node.left)
+      right_height = height(node.right)
+      [left_height, right_height].max + 1
+    end
+
+    def self.depth(node, root)
+      return -1 unless root
+
+      d = -1
+      return d + 1 if node == root || (d = depth(node, root.left)) >= 0 || (d = depth(node, root.right)) >= 0
+
+      d
     end
 
     def self.pretty_print(node, prefix = "", is_left: true)
       pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", is_left: false) if node.right
       puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
       pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", is_left: true) if node.left
+    end
+
+    private_class_method def self.move_successor(node)
+      successor = node.right
+      successor = node.left while successor&.left
+      node.value = successor_of(node).value
+      node.right = remove(successor.value, node.right)
     end
   end
 
@@ -100,6 +120,20 @@ module BST
 
       @root = Node.remove(value, @root)
       balance if balance_after
+    end
+
+    def find(value)
+      Node.find(value, @root)
+    end
+
+    def height(value)
+      node = find(value)
+      Node.height(node) unless node.nil?
+    end
+
+    def depth(value)
+      node = find(value)
+      Node.depth(node, @root) unless node.nil?
     end
 
     def preorder(node = @root, &)
@@ -145,27 +179,11 @@ module BST
       all
     end
 
-    def find(value, node = @root)
-      return node if node == value
-      return find(value, node.left) if node > value
-      return find(value, node.right) if node < value
-
-      nil
-    end
-
-    def height(node = @root)
-      return -1 unless node
-
-      left_height = height(node.left)
-      right_height = height(node.right)
-      [left_height, right_height].max + 1
-    end
-
     def balanced?(node = @root)
       return true unless node
 
-      left_height = height(node.left)
-      right_height = height(node.right)
+      left_height = Node.height(node.left)
+      right_height = Node.height(node.right)
       return true if balanced?(node.left) && balanced?(node.right) && (left_height - right_height).abs <= 1
 
       false

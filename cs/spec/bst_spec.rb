@@ -91,10 +91,25 @@ end
 describe "finding" do
   numbers = (1..10).to_a
   tree = BST::Tree.new(numbers)
+  tree.pretty_print
 
   it "should find nodes" do
     numbers.each do |number|
       expect(tree.find(number).value).to eq number
     end
+  end
+
+  it "should find depth of a value" do
+    expect(tree.depth(5)).to eq 0
+    expect(tree.depth(3)).to eq 2
+    expect(tree.depth(4)).to eq 3
+    expect(tree.depth(15)).to be_nil
+  end
+
+  it "should find height of a value" do
+    expect(tree.height(5)).to eq 3
+    expect(tree.height(8)).to eq 2
+    expect(tree.height(4)).to eq 0
+    expect(tree.height(15)).to be_nil
   end
 end
